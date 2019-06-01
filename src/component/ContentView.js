@@ -5,18 +5,28 @@ import {TabContent, TabPane, Button} from "reactstrap";
 import {VIEW_IDS} from "../constant/views";
 
 
-const {upload, empty} = VIEW_IDS;
+const {search, upload, statistics} = VIEW_IDS;
 export class ContentView extends Component{
   constructor(props){
     super(props)
   }
 
   render(){
+    const {activeView} = this.props;
 
     return (
       <div>
-        <Button color="danger">Danger!</Button>
-        {this.props.file}
+        <TabContent activeTab={activeView}>
+          <TabPane tabId={upload}>
+            <h1>hello world</h1>
+          </TabPane>
+          <TabPane tabId={search}>
+            <h1>Nice to Meet you</h1>
+          </TabPane>
+          <TabPane tabId={statistics}>
+            <h1>statistics Result</h1>
+          </TabPane>
+        </TabContent>
       </div>
     )
   }
@@ -25,7 +35,7 @@ export class ContentView extends Component{
 
 function mapStateToProps(state){
   return {
-    file: state.upload.fileName
+    activeView: state.app.currentView
   }
 }
 
