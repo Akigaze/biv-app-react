@@ -1,3 +1,8 @@
 .upload-view{
     padding: 18px 10px;
 }
+.data-table{
+    max-height: 360px;
+    overflow-y: auto;
+}
+

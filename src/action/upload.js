@@ -21,3 +21,16 @@ export const uploadFileToServer = (file, operation) => {
     }
   }
 };
+
+export const createTable = (file, operation) => {
+  return async (dispatch) => {
+    dispatch({});
+  }
+};
+
+export const insertDate = (file, operation) => {
+  return async (dispatch) => {
+    dispatch({});
+
+  }
+};
