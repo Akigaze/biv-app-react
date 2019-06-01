@@ -2,12 +2,13 @@ import React, {Component} from "react";
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 import classNames from "classnames";
-import {Button, CustomInput, FormGroup, Label} from "reactstrap";
+import {Button, CustomInput, Form, FormGroup, Label} from "reactstrap";
 
 import "../../style/upload.css"
 import {first} from "../../util/array-util";
 import {OPERATION_TYPE} from "../../constant/upload";
 import {BlankColumn} from "../common/blank";
+import {uploadFileToServer} from "../../action/upload";
 
 const {create, insert} = OPERATION_TYPE;
 export class UploadView extends Component {
@@ -28,6 +29,11 @@ export class UploadView extends Component {
     this.setState({operationType: event.target.value})
   };
 
+  analysisBtnClick = (event) => {
+    const {file, operationType} = this.state;
+    this.props.actions.upload(file, operationType)
+  };
+
   render() {
     const {file, operationType} = this.state;
     const fileLabel = file.name || "Choose a file";
@@ -43,7 +49,7 @@ export class UploadView extends Component {
           <BlankColumn width={30}/>
           <CustomInput id="insert" type="radio" name="operationType" className="radio" label="Insert Existed Table" value={insert} checked={operationType === insert} onChange={this.operationTypeSelect} inline/>
         </FormGroup>
-        <Button color="primary">Analysis</Button>
+        <Button color="primary" onClick={this.analysisBtnClick}>Analysis</Button>
       </div>
     )
   }
@@ -57,7 +63,7 @@ function mapStateToProps(state){
 function mapDispatchToProps(dispatch){
   return {
     actions: bindActionCreators({
-
+      upload: uploadFileToServer
     }, dispatch)
   }
 }

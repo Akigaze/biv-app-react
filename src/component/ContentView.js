@@ -4,7 +4,7 @@ import {bindActionCreators} from "redux";
 import {TabContent, TabPane, Button} from "reactstrap";
 
 import {VIEW_IDS} from "../constant/views";
-import {UploadView} from "./upload/UploadView";
+import UploadView from "./upload/UploadView";
 
 
 const {search, upload, statistics} = VIEW_IDS;

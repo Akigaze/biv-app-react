@@ -1,0 +1,1 @@
+export const SAVE_UPLOAD_RESULT = "SAVE_UPLOAD_RESULT";

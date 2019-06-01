@@ -1,5 +1,5 @@
 import {VIEW_IDS} from "../constant/views";
-import {CHANGE_CURRENT_VIEW} from "../constant/app-action-type";
+import {CHANGE_CURRENT_VIEW} from "../constant/action-type/app-action-type";
 
 const initialState = {
   currentView: VIEW_IDS.upload
