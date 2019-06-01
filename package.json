@@ -1,0 +1,52 @@
+{
+  "name": "bio-info-visibility-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "build": "webpack --config webpack.config.js",
+    "start": "webpack-dev-server --open",
+    "jest": "jest --coverage",
+    "jasmine": "jasmine"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "babel": "^6.23.0",
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-1": "^6.24.1",
+    "babel-register": "^6.26.0",
+    "bootstrap": "^4.3.1",
+    "classnames": "^2.2.6",
+    "css-loader": "^1.0.1",
+    "lodash": "^4.17.11",
+    "react": "^16.6.1",
+    "react-dom": "^16.6.1",
+    "react-redux": "^6.0.0",
+    "reactstrap": "^8.0.0",
+    "redux": "^4.0.1",
+    "redux-thunk": "^2.3.0",
+    "style-loader": "^0.23.1"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "enzyme": "^3.7.0",
+    "enzyme-adapter-react-16": "^1.7.0",
+    "ignore-styles": "^5.0.1",
+    "jasmine": "^3.3.0",
+    "jasmine-enzyme": "^7.0.1",
+    "jest": "^23.6.0",
+    "jest-enzyme": "^7.0.1",
+    "jsdom": "^13.0.0",
+    "redux-mock-store": "^1.5.3",
+    "webpack": "^4.25.1",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.14"
+  }
+}
