@@ -23,6 +23,7 @@ export class UploadView extends Component {
   constructor(props) {
     super(props);
     this.fileInout = React.createRef();
+    this.tableNameInout = React.createRef();
     this.state = {
       file: {},
       operationType: create,
@@ -49,7 +50,12 @@ export class UploadView extends Component {
   };
 
   createBtnClick = () => {
-
+    let {fields} = this.props.uploadResult;
+    const tableName = this.tableNameInout.current.value
+    fields = fields.map(field => {
+      return {name: field.db_name, type: field.db_type}
+    });
+    this.props.actions.create(tableName, fields, create)
   };
 
   insertBtnClick = () => {
@@ -87,7 +93,7 @@ export class UploadView extends Component {
                 <FormGroup>
                   <InputGroup>
                     <InputGroupAddon addonType="prepend">Table Name</InputGroupAddon>
-                    <Input id="table-name" type="text" defaultValue={uploadResult.name}/>
+                    <Input innerRef={this.tableNameInout} id="table-name" type="text" defaultValue={uploadResult.name}/>
                   </InputGroup>
                 </FormGroup>
                 <FormGroup>
