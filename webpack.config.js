@@ -21,7 +21,7 @@ const config = {
             {
                 test: /\.css/,
                 use: ["style-loader", "css-loader"],
-                exclude: /(node_modules|bower_components)/
+                exclude: /(bower_components)/
             }
         ]
     },

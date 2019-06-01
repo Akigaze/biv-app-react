@@ -6,6 +6,7 @@ import {applyMiddleware, createStore} from "redux";
 import bivReducer from "./reducer";
 import thunk from 'redux-thunk';
 import {actionLog} from "./util/biv-thunk";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const store = createStore(bivReducer, applyMiddleware(actionLog, thunk));
 
