@@ -19,3 +19,15 @@ body > div {
     color: #AAA;
     font-size: 24px;
 }
+
+.radio{
+    cursor: pointer;
+}
+
+.radio * {
+    cursor: pointer;
+}
+
+.inline-block{
+    display: inline-block;
+}

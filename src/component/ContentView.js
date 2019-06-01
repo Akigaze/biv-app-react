@@ -2,7 +2,9 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import {TabContent, TabPane, Button} from "reactstrap";
+
 import {VIEW_IDS} from "../constant/views";
+import {UploadView} from "./upload/UploadView";
 
 
 const {search, upload, statistics} = VIEW_IDS;
@@ -18,7 +20,7 @@ export class ContentView extends Component{
       <div>
         <TabContent activeTab={activeView}>
           <TabPane tabId={upload}>
-            <h1>hello world</h1>
+            <UploadView/>
           </TabPane>
           <TabPane tabId={search}>
             <h1>Nice to Meet you</h1>
