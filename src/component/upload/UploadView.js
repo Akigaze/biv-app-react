@@ -2,7 +2,7 @@ import React, {Component, Fragment} from "react";
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 import classNames from "classnames";
-import {Button, Collapse, CustomInput, FormGroup, Input, InputGroup, InputGroupAddon, Label} from "reactstrap";
+import {Alert, Button, Collapse, CustomInput, FormGroup, Input, InputGroup, InputGroupAddon, Label} from "reactstrap";
 
 import "../../style/upload.css"
 import {first} from "../../util/array-util";
@@ -24,10 +24,13 @@ export class UploadView extends Component {
     super(props);
     this.fileInout = React.createRef();
     this.tableNameInout = React.createRef();
+    this.dropExist = React.createRef();
     this.state = {
       file: {},
       operationType: create,
-      showAnalysisResult: true
+      showAnalysisResult: true,
+      createAlertVisible: true,
+      insertAlertVisible: true
     }
   }
 
@@ -51,26 +54,46 @@ export class UploadView extends Component {
 
   createBtnClick = () => {
     let {fields} = this.props.uploadResult;
-    const tableName = this.tableNameInout.current.value
+    const tableName = this.tableNameInout.current.value;
+    const isDropExist = this.dropExist.current.checked;
     fields = fields.map(field => {
       return {name: field.db_name, type: field.db_type}
     });
-    this.props.actions.create(tableName, fields, create)
+    this.props.actions.create(tableName, fields, isDropExist, create)
   };
 
   insertBtnClick = () => {
+    const {uploadResult, createResult} = this.props;
+    const {table} = createResult;
+    const {file} = this.state;
+    const fields = uploadResult.fields.map(field => {
+      const {index, db_name, db_type} = field;
+      return {index, name: db_name, type: db_type}
+    });
+    this.props.actions.insert(table, fields, file, insert)
+  };
 
+  alertToggle = () => {
+    this.setState({createAlertVisible: false})
   };
 
 
   render() {
-    const {uploadResult} = this.props;
-    const {file, operationType, showAnalysisResult} = this.state;
+    const {uploadResult, createResult, insertResult} = this.props;
+    const {file, operationType, showAnalysisResult, createAlertVisible, insertAlertVisible} = this.state;
     const fileLabel = file.name || "Choose a file";
     const hasUploadResult = !isEmpty(uploadResult);
+    const showCreateAlert = !isEmpty(createResult) && createResult.success && createAlertVisible;
+    const showInsertAlert = !isEmpty(insertResult) && insertResult.success && insertAlertVisible;
 
     return (
       <div className="upload-view">
+        <Alert color="success" isOpen={showCreateAlert} toggle={this.alertToggle}>
+          {`Table ${createResult.table} create successfully! File id is ${createResult.file}, ready to insert data.`}
+        </Alert>
+        <Alert color="success" isOpen={showInsertAlert} toggle={this.alertToggle}>
+          {`Table ${insertResult.table} insert successfully! Insert total ${insertResult.insertRows} rows.`}
+        </Alert>
         <FormGroup>
           <Label for="file-upload">Select a upload file</Label>
           <CustomInput id="file-upload" type="file" innerRef={this.fileInout} label={fileLabel} onChange={this.fileSelect}/>
@@ -97,7 +120,7 @@ export class UploadView extends Component {
                   </InputGroup>
                 </FormGroup>
                 <FormGroup>
-                  <DataTable headers={tableHeaders} data={uploadResult.fields}/>
+                  <DataTable headers={tableHeaders} data={uploadResult.fields} id="index"/>
                 </FormGroup>
                 <FormGroup>
                   <InputGroup>
@@ -108,7 +131,9 @@ export class UploadView extends Component {
               </Collapse>
             </FormGroup>
             <FormGroup>
+              <CustomInput id="dropIfExist" type="checkbox" innerRef={this.dropExist} label="Drop if existed" inline />
               <Button color="primary" onClick={this.createBtnClick}>Create</Button>
+              <BlankColumn width={30}/>
               <Button color="primary" onClick={this.insertBtnClick}>Insert</Button>
             </FormGroup>
           </Fragment>
@@ -120,7 +145,9 @@ export class UploadView extends Component {
 
 function mapStateToProps(state){
   return {
-    uploadResult: state.upload.uploadResult
+    uploadResult: state.upload.uploadResult,
+    createResult: state.upload.tableCreateResult,
+    insertResult: state.upload.insertResult
   }
 }
 
