@@ -14,6 +14,7 @@ import {DataTable} from "../common/DataTable";
 
 const {create, insert} = OPERATION_TYPE;
 const tableHeaders = [
+  "Index",
   "Field of Excel",
   "Field of Database",
   "Type of Database"
@@ -57,7 +58,7 @@ export class UploadView extends Component {
     const tableName = this.tableNameInout.current.value;
     const isDropExist = this.dropExist.current.checked;
     fields = fields.map(field => {
-      return {name: field.db_name, type: field.db_type}
+      return {name: field.nameOfDatabase, type: field.type}
     });
     this.props.actions.create(tableName, fields, isDropExist, create)
   };
@@ -67,8 +68,8 @@ export class UploadView extends Component {
     const {table} = createResult;
     const {file} = this.state;
     const fields = uploadResult.fields.map(field => {
-      const {index, db_name, db_type} = field;
-      return {index, name: db_name, type: db_type}
+      const {index, nameOfDatabase, type} = field;
+      return {index, name: nameOfDatabase, type: type}
     });
     this.props.actions.insert(table, fields, file, insert)
   };
@@ -120,12 +121,12 @@ export class UploadView extends Component {
                   </InputGroup>
                 </FormGroup>
                 <FormGroup>
-                  <DataTable headers={tableHeaders} data={uploadResult.fields} id="index"/>
+                  <DataTable headers={tableHeaders} data={uploadResult.fields}/>
                 </FormGroup>
                 <FormGroup>
                   <InputGroup>
                     <InputGroupAddon addonType="prepend">Total Row Number</InputGroupAddon>
-                    <Input id="row-count" type="text" defaultValue={uploadResult.count}/>
+                    <Input id="row-count" type="text" disabled defaultValue={uploadResult.count}/>
                   </InputGroup>
                 </FormGroup>
               </Collapse>

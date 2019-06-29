@@ -8,14 +8,14 @@ export class DataTable extends Component {
   }
 
   render() {
-    const {headers, tableName, data, id} = this.props;
+    const {headers, tableName, data} = this.props;
 
     return (
       <div className="data-table">
         <Table striped size="sm">
           <TableHeaderRow headers={headers}/>
           <tbody>
-            {data.map((row, index) => <TableBodyRow key={index} index={row[id] || index +1} row={row}/>)}
+            {data.map((row, index) => <TableBodyRow key={index} index={index + 1} row={row}/>)}
           </tbody>
         </Table>
       </div>
