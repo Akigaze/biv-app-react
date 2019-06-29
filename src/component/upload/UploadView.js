@@ -82,7 +82,7 @@ function mapDispatchToProps(dispatch){
   return {
     actions: bindActionCreators({
       upload: uploadFileToServer,
-      closePopTip: closePop,
+      closePopTip: closePop
     }, dispatch)
   }
 }

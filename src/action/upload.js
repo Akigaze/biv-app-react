@@ -4,7 +4,8 @@ import {
   CLOSE_POP,
   SAVE_INSERT_RESULT,
   SAVE_TABLE_CREATE_RESULT,
-  SAVE_UPLOAD_RESULT
+  SAVE_UPLOAD_RESULT,
+  SET_UPLOADED_FILE
 } from "../constant/action-type/upload-action-type";
 
 const formAxios = axios.create({
@@ -21,6 +22,16 @@ const jsonAxios = axios.create({
   }
 });
 
+function setClosePopJob(dispatch){
+  setTimeout(() => {
+    dispatch({type: CLOSE_POP})
+  }, 20000)
+}
+
+export const setUploadedFile = (file) => {
+  return {type: SET_UPLOADED_FILE, file}
+};
+
 export const closePop = () => {
   return {type: CLOSE_POP}
 };
@@ -32,6 +43,7 @@ export const uploadFileToServer = (file, operation) => {
     const url = `/file?operation=${operation}`;
     const response = await formAxios.post(url, data);
     if (response != null) {
+      dispatch({type: SET_UPLOADED_FILE, payload: {file}});
       dispatch({type: SAVE_UPLOAD_RESULT, payload: {data: response.data}});
     }
   }
@@ -44,6 +56,7 @@ export const createTable = (tableName, fields, dropExist, operation) => {
     const response = await jsonAxios.post(url, data);
     if (response != null) {
       dispatch({type: SAVE_TABLE_CREATE_RESULT, payload: response.data});
+      setClosePopJob(dispatch)
     }
   }
 };
@@ -58,6 +71,7 @@ export const insertDate = (tableName, fields, file, operation) => {
     const response = await formAxios.post(url, data);
     if (response != null) {
       dispatch({type: SAVE_INSERT_RESULT, payload: response.data});
+      setClosePopJob(dispatch)
     }
   }
 };

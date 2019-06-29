@@ -18,19 +18,13 @@ const tableHeaders = [
   "Type of Database"
 ];
 
-const {create, insert} = OPERATION_TYPE;
-
 export class UploadResultTable extends Component {
   constructor(props) {
     super(props);
     this.tableNameInput = React.createRef();
     this.dropExist = React.createRef();
     this.state = {
-      file: {},
-      operationType: create,
-      showAnalyzeResult: true,
-      createAlertVisible: true,
-      insertAlertVisible: true
+      showAnalyzeResult: true
     }
   }
 
@@ -46,18 +40,13 @@ export class UploadResultTable extends Component {
     fields = fields.map(field => {
       return {name: field.nameOfDatabase, type: field.type}
     });
-    this.props.actions.create(tableName, fields, isDropExist, create)
+    this.props.actions.create(tableName, fields, isDropExist, OPERATION_TYPE.create)
   };
 
   insertBtnClick = () => {
-    const {uploadResult, createResult} = this.props;
-    const {table} = createResult;
-    const {file} = this.state;
-    const fields = uploadResult.fields.map(field => {
-      const {index, nameOfDatabase, type} = field;
-      return {index, name: nameOfDatabase, type: type}
-    });
-    this.props.actions.insert(table, fields, file, insert)
+    const {tableStructure, uploadedFile} = this.props;
+    let {name, fields} = tableStructure;
+    this.props.actions.insert(name, fields, uploadedFile, OPERATION_TYPE.insert)
   };
 
   render() {
@@ -74,7 +63,7 @@ export class UploadResultTable extends Component {
             <FormGroup>
               <InputGroup>
                 <InputGroupAddon addonType="prepend">Table Name</InputGroupAddon>
-                <Input innerRef={this.tableNameInput} id="table-name" type="text" defaultValue={uploadResult.name}/>
+                <Input innerRef={this.tableNameInput} id="table-name" type="text" value={uploadResult.name}/>
               </InputGroup>
             </FormGroup>
             <FormGroup>
@@ -83,7 +72,7 @@ export class UploadResultTable extends Component {
             <FormGroup>
               <InputGroup>
                 <InputGroupAddon addonType="prepend">Total Row Number</InputGroupAddon>
-                <Input id="row-count" type="text" disabled defaultValue={uploadResult.count}/>
+                <Input id="row-count" type="text" disabled value={uploadResult.count}/>
               </InputGroup>
             </FormGroup>
           </Collapse>
@@ -101,9 +90,11 @@ export class UploadResultTable extends Component {
 
 function mapStateToProps(state){
   return {
+    uploadedFile: state.upload.file,
     uploadResult: state.upload.uploadResult,
     createResult: state.upload.tableCreateResult,
-    insertResult: state.upload.insertResult
+    insertResult: state.upload.insertResult,
+    tableStructure: state.upload.tableStructure
   }
 }
 
