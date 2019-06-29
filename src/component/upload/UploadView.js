@@ -1,30 +1,24 @@
-import React, {Component, Fragment} from "react";
+import React, {Component} from "react";
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 import classNames from "classnames";
-import {Alert, Button, Collapse, CustomInput, FormGroup, Input, InputGroup, InputGroupAddon, Label} from "reactstrap";
+import {Alert, Button, CustomInput, FormGroup, Label} from "reactstrap";
 
 import "../../style/upload.css"
 import {first} from "../../util/array-util";
 import {OPERATION_TYPE} from "../../constant/upload";
 import {BlankColumn} from "../common/blank";
-import {createTable, insertDate, uploadFileToServer} from "../../action/upload";
+import {uploadFileToServer} from "../../action/upload";
 import {isEmpty} from "lodash";
-import {DataTable} from "../common/DataTable";
+import UploadResultTable from "./UploadResultTable";
 
 const {create, insert} = OPERATION_TYPE;
-const tableHeaders = [
-  "Index",
-  "Field of Excel",
-  "Field of Database",
-  "Type of Database"
-];
 
 export class UploadView extends Component {
   constructor(props) {
     super(props);
-    this.fileInout = React.createRef();
-    this.tableNameInout = React.createRef();
+    this.fileInput = React.createRef();
+    this.tableNameInput = React.createRef();
     this.dropExist = React.createRef();
     this.state = {
       file: {},
@@ -36,7 +30,7 @@ export class UploadView extends Component {
   }
 
   fileSelect = (event) => {
-    this.setState({file: first(this.fileInout.current.files)})
+    this.setState({file: first(this.fileInput.current.files)})
   };
 
   operationTypeSelect = (event) => {
@@ -55,7 +49,7 @@ export class UploadView extends Component {
 
   createBtnClick = () => {
     let {fields} = this.props.uploadResult;
-    const tableName = this.tableNameInout.current.value;
+    const tableName = this.tableNameInput.current.value;
     const isDropExist = this.dropExist.current.checked;
     fields = fields.map(field => {
       return {name: field.nameOfDatabase, type: field.type}
@@ -97,7 +91,7 @@ export class UploadView extends Component {
         </Alert>
         <FormGroup>
           <Label for="file-upload">Select a upload file</Label>
-          <CustomInput id="file-upload" type="file" innerRef={this.fileInout} label={fileLabel} onChange={this.fileSelect}/>
+          <CustomInput id="file-upload" type="file" innerRef={this.fileInput} label={fileLabel} onChange={this.fileSelect}/>
         </FormGroup>
         <FormGroup>
           <CustomInput id="create" type="radio" name="operationType" className="radio" label="Create New Table" value={create} checked={operationType === create} onChange={this.operationTypeSelect} inline/>
@@ -108,36 +102,7 @@ export class UploadView extends Component {
           <Button color="primary" onClick={this.analysisBtnClick}>Analysis</Button>
         </FormGroup>
         {hasUploadResult &&
-          <Fragment>
-            <FormGroup>
-              <div className="blank-row" id="analysisResultTable" onClick={this.resultTableOpen}>
-                <Label >Upload information over view</Label>
-              </div>
-              <Collapse isOpen={showAnalysisResult && hasUploadResult}>
-                <FormGroup>
-                  <InputGroup>
-                    <InputGroupAddon addonType="prepend">Table Name</InputGroupAddon>
-                    <Input innerRef={this.tableNameInout} id="table-name" type="text" defaultValue={uploadResult.name}/>
-                  </InputGroup>
-                </FormGroup>
-                <FormGroup>
-                  <DataTable headers={tableHeaders} data={uploadResult.fields}/>
-                </FormGroup>
-                <FormGroup>
-                  <InputGroup>
-                    <InputGroupAddon addonType="prepend">Total Row Number</InputGroupAddon>
-                    <Input id="row-count" type="text" disabled defaultValue={uploadResult.count}/>
-                  </InputGroup>
-                </FormGroup>
-              </Collapse>
-            </FormGroup>
-            <FormGroup>
-              <CustomInput id="dropIfExist" type="checkbox" innerRef={this.dropExist} label="Drop if existed" inline />
-              <Button color="primary" onClick={this.createBtnClick}>Create</Button>
-              <BlankColumn width={30}/>
-              <Button color="primary" onClick={this.insertBtnClick}>Insert</Button>
-            </FormGroup>
-          </Fragment>
+          <UploadResultTable />
         }
       </div>
     )
@@ -156,8 +121,6 @@ function mapDispatchToProps(dispatch){
   return {
     actions: bindActionCreators({
       upload: uploadFileToServer,
-      create: createTable,
-      insert: insertDate
     }, dispatch)
   }
 }
