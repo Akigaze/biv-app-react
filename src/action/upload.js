@@ -1,6 +1,7 @@
 import axios from "axios";
 
 import {
+  CLOSE_POP,
   SAVE_INSERT_RESULT,
   SAVE_TABLE_CREATE_RESULT,
   SAVE_UPLOAD_RESULT
@@ -20,6 +21,9 @@ const jsonAxios = axios.create({
   }
 });
 
+export const closePop = () => {
+  return {type: CLOSE_POP}
+};
 
 export const uploadFileToServer = (file, operation) => {
   return async (dispatch) => {

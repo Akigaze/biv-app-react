@@ -18,6 +18,8 @@ const tableHeaders = [
   "Type of Database"
 ];
 
+const {create, insert} = OPERATION_TYPE;
+
 export class UploadResultTable extends Component {
   constructor(props) {
     super(props);
@@ -25,7 +27,7 @@ export class UploadResultTable extends Component {
     this.dropExist = React.createRef();
     this.state = {
       file: {},
-      operationType: OPERATION_TYPE.create,
+      operationType: create,
       showAnalyzeResult: true,
       createAlertVisible: true,
       insertAlertVisible: true
