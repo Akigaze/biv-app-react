@@ -7,7 +7,7 @@ import {Button, Collapse, CustomInput, FormGroup, Input, InputGroup, InputGroupA
 import "../../style/upload.css"
 import {OPERATION_TYPE} from "../../constant/upload";
 import {BlankColumn} from "../common/blank";
-import {createTable, insertDate} from "../../action/upload";
+import {changeTableName, createTable, insertDate} from "../../action/upload";
 import {isEmpty} from "lodash";
 import {DataTable} from "../common/DataTable";
 
@@ -34,23 +34,27 @@ export class UploadResultTable extends Component {
   };
 
   createBtnClick = () => {
-    let {fields} = this.props.uploadResult;
-    const tableName = this.tableNameInput.current.value;
+    const {tableName, uploadResult} = this.props;
     const isDropExist = this.dropExist.current.checked;
-    fields = fields.map(field => {
+    const fields = uploadResult.fields.map(field => {
       return {name: field.nameOfDatabase, type: field.type}
     });
     this.props.actions.create(tableName, fields, isDropExist, OPERATION_TYPE.create)
   };
 
   insertBtnClick = () => {
-    const {tableStructure, uploadedFile} = this.props;
-    let {name, fields} = tableStructure;
-    this.props.actions.insert(name, fields, uploadedFile, OPERATION_TYPE.insert)
+    const {tableName, tableStructure, uploadedFile} = this.props;
+    let {fields} = tableStructure;
+    this.props.actions.insert(tableName, fields, uploadedFile, OPERATION_TYPE.insert)
+  };
+
+  changeTableName = (event) => {
+    const newName = event.target.value.trim();
+    this.props.actions.setTableName(newName);
   };
 
   render() {
-    const {uploadResult} = this.props;
+    const {uploadResult, tableName} = this.props;
     const {showAnalyzeResult} = this.state;
 
     return (
@@ -63,7 +67,8 @@ export class UploadResultTable extends Component {
             <FormGroup>
               <InputGroup>
                 <InputGroupAddon addonType="prepend">Table Name</InputGroupAddon>
-                <Input innerRef={this.tableNameInput} id="table-name" type="text" value={uploadResult.name}/>
+                <Input innerRef={this.tableNameInput} id="table-name" type="text" value={tableName}
+                       onChange={this.changeTableName}/>
               </InputGroup>
             </FormGroup>
             <FormGroup>
@@ -88,21 +93,23 @@ export class UploadResultTable extends Component {
   }
 }
 
-function mapStateToProps(state){
+function mapStateToProps(state) {
   return {
     uploadedFile: state.upload.file,
     uploadResult: state.upload.uploadResult,
     createResult: state.upload.tableCreateResult,
     insertResult: state.upload.insertResult,
-    tableStructure: state.upload.tableStructure
+    tableStructure: state.upload.tableStructure,
+    tableName: state.upload.tableName
   }
 }
 
-function mapDispatchToProps(dispatch){
+function mapDispatchToProps(dispatch) {
   return {
     actions: bindActionCreators({
       create: createTable,
-      insert: insertDate
+      insert: insertDate,
+      setTableName: changeTableName
     }, dispatch)
   }
 }

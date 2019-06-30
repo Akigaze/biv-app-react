@@ -1,4 +1,5 @@
 import {
+  CHANGE_TABLE_NAME,
   CLOSE_POP,
   SAVE_INSERT_RESULT,
   SAVE_TABLE_CREATE_RESULT,
@@ -9,6 +10,7 @@ import {OPERATION_RESULT} from "../constant/upload";
 
 const initialState = {
   file: null,
+  tableName: null,
   uploadResult: null,
   tableCreateResult: {},
   insertResult: {},
@@ -23,7 +25,7 @@ const uploadReducer = (state=initialState, action={}) => {
       return {...state, file: payload.file}
     }
     case SAVE_UPLOAD_RESULT: {
-      return {...state, uploadResult: payload.data, tableStructure: payload.data}
+      return {...state, uploadResult: payload.data, tableStructure: payload.data, tableName: payload.data.name}
     }
     case SAVE_TABLE_CREATE_RESULT: {
       const {table, success} = payload;
@@ -40,6 +42,9 @@ const uploadReducer = (state=initialState, action={}) => {
     }
     case CLOSE_POP: {
       return {...state, pop: {}}
+    }
+    case CHANGE_TABLE_NAME: {
+      return {...state, tableName: payload.name}
     }
     default: return state;
   }

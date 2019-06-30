@@ -1,6 +1,7 @@
 import axios from "axios";
 
 import {
+  CHANGE_TABLE_NAME,
   CLOSE_POP,
   SAVE_INSERT_RESULT,
   SAVE_TABLE_CREATE_RESULT,
@@ -22,8 +23,11 @@ const jsonAxios = axios.create({
   }
 });
 
+let popJob = null;
+
 function setClosePopJob(dispatch){
-  setTimeout(() => {
+  clearTimeout(popJob);
+  popJob = setTimeout(() => {
     dispatch({type: CLOSE_POP})
   }, 20000)
 }
@@ -34,6 +38,10 @@ export const setUploadedFile = (file) => {
 
 export const closePop = () => {
   return {type: CLOSE_POP}
+};
+
+export const changeTableName = (name) => {
+  return {type: CHANGE_TABLE_NAME, payload: {name}}
 };
 
 export const uploadFileToServer = (file, operation) => {
