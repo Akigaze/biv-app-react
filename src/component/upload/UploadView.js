@@ -26,7 +26,8 @@ export class UploadView extends Component {
   }
 
   fileSelect = (event) => {
-    this.setState({file: first(this.fileInput.current.files)})
+    const fileList = this.fileInput.current.files;
+    this.setState({file: first(fileList) || {}})
   };
 
   operationTypeSelect = (event) => {
