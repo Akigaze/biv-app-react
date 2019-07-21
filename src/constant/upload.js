@@ -5,5 +5,10 @@ export const OPERATION_TYPE = {
 
 export const OPERATION_RESULT = {
   success: "success",
-  fail: "fail"
+  fail: "danger"
+};
+
+export const POP_TYPE = {
+  success: "success",
+  danger: "danger"
 };

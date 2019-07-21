@@ -1,18 +1,14 @@
 import React, {Component} from "react";
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
-import classNames from "classnames";
 import {Alert, Button, CustomInput, FormGroup, Label} from "reactstrap";
+import {isEmpty} from "lodash";
 
 import "../../style/upload.css"
 import {first} from "../../util/array-util";
-import {OPERATION_TYPE} from "../../constant/upload";
-import {BlankColumn} from "../common/blank";
-import {closePop, doFileAnalyze, uploadFileToServer} from "../../action/upload";
-import {isEmpty} from "lodash";
+import {OPERATION_TYPE, POP_TYPE} from "../../constant/upload";
+import {closePop, doFileAnalyze, openPop} from "../../action/upload";
 import UploadResultTable from "./UploadResultTable";
-
-const {create, insert} = OPERATION_TYPE;
 
 export class UploadView extends Component {
   constructor(props) {
@@ -31,6 +27,10 @@ export class UploadView extends Component {
 
   analysisBtnClick = (event) => {
     const {file} = this.state;
+    if (!Object.hasOwnProperty("name", file)){
+      this.props.actions.openPopTip(POP_TYPE.danger, "Choose a file!");
+      return
+    }
     this.props.actions.upload(file)
   };
 
@@ -71,7 +71,8 @@ function mapDispatchToProps(dispatch){
   return {
     actions: bindActionCreators({
       upload: doFileAnalyze,
-      closePopTip: closePop
+      closePopTip: closePop,
+      openPopTip: openPop
     }, dispatch)
   }
 }

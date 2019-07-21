@@ -1,5 +1,6 @@
 import {
   CHANGE_TABLE_NAME,
+  OPEN_POP,
   CLOSE_POP,
   SAVE_INSERT_RESULT,
   SAVE_TABLE_CREATE_RESULT,
@@ -39,6 +40,9 @@ const uploadReducer = (state=initialState, action={}) => {
       const info = `Successfully insert ${successRows} rows, and ${failRows} rows insert fail! Cost time ${costTime} second`;
       const pop = {type, info, isOpen: true};
       return {...state, pop, insertResult: {...payload}}
+    }
+    case OPEN_POP: {
+      return {...state, pop: {type: payload.type, info: payload.info, isOpen: true}}
     }
     case CLOSE_POP: {
       return {...state, pop: {}}

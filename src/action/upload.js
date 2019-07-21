@@ -2,12 +2,14 @@ import axios from "axios";
 
 import {
   CHANGE_TABLE_NAME,
+  OPEN_POP,
   CLOSE_POP,
   SAVE_INSERT_RESULT,
   SAVE_TABLE_CREATE_RESULT,
   SAVE_UPLOAD_RESULT,
   SET_UPLOADED_FILE
 } from "../constant/action-type/upload-action-type";
+import {POP_TYPE} from "../constant/upload";
 
 const formAxios = axios.create({
   baseURL: "http://localhost:9100",
@@ -31,6 +33,13 @@ function setClosePopJob(dispatch){
     dispatch({type: CLOSE_POP})
   }, 20000)
 }
+
+export const openPop = (type, info) => {
+  return (dispatch) => {
+    dispatch({type: OPEN_POP, payload: {type, info}});
+    setClosePopJob(dispatch);
+  }
+};
 
 export const closePop = () => {
   return {type: CLOSE_POP}
@@ -72,10 +81,18 @@ export const insertDate = (tableName, fields, file, operation) => {
     data.append("file", file);
     data.append("tableName", tableName);
     data.append("fields", JSON.stringify(fields));
-    const response = await formAxios.post(url, data);
-    if (response != null) {
-      dispatch({type: SAVE_INSERT_RESULT, payload: response.data});
-      setClosePopJob(dispatch)
-    }
+    formAxios.post(url, data).then((response) => {
+      if (response != null) {
+        dispatch({type: SAVE_INSERT_RESULT, payload: response.data});
+        setClosePopJob(dispatch)
+      }
+    }).catch(({response}) => {
+        if(response.status === 404){
+          dispatch({type: OPEN_POP, payload: {type: POP_TYPE.danger, info: `Table "${tableName}" not exists!`}});
+          setClosePopJob(dispatch);
+        }
+      }
+    );
+
   }
 };
