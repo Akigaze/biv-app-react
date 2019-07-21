@@ -5,3 +5,4 @@ export const SET_UPLOADED_FILE = "SET_UPLOADED_FILE";
 export const CHANGE_TABLE_NAME = "CHANGE_TABLE_NAME";
 export const OPEN_POP = "OPEN_POP";
 export const CLOSE_POP = "CLOSE_POP";
+export const MODIFY_FIELD_NAME = "MODIFY_FIELD_NAME";

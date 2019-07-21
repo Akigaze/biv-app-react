@@ -5,7 +5,8 @@ import {
   SAVE_INSERT_RESULT,
   SAVE_TABLE_CREATE_RESULT,
   SAVE_UPLOAD_RESULT,
-  SET_UPLOADED_FILE
+  SET_UPLOADED_FILE,
+  MODIFY_FIELD_NAME
 } from "../constant/action-type/upload-action-type";
 import {OPERATION_RESULT} from "../constant/upload";
 
@@ -49,6 +50,12 @@ const uploadReducer = (state=initialState, action={}) => {
     }
     case CHANGE_TABLE_NAME: {
       return {...state, tableName: payload.name}
+    }
+    case MODIFY_FIELD_NAME: {
+      const tableFields = [...state.tableFields];
+      const target = tableFields.find(field => field.id === payload.id);
+      target.nameOfDatabase = payload.name;
+      return {...state, tableFields}
     }
     default: return state;
   }

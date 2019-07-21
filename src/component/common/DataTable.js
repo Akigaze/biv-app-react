@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import classNames from "classnames";
 import {Table} from "reactstrap";
+import EditableCell from "./EditableCell";
 
 export class DataTable extends Component {
   constructor(props) {
@@ -38,8 +39,22 @@ const TableBodyRow = ({index, row}) => {
   return (
     <tr>
       <th scope="row">{index}</th>
-      {Object.values(row).map((value, index) => <td key={index}>{value}</td>)}
+      {Object.values(row).map((value, i) => {
+        if(!isEditable(i)){
+          return <th key={i}>{value}</th>
+        }else {
+          return <EditableCell key={i} id={row.id}>{value}</EditableCell>
+        }
+      })}
     </tr>
   )
+};
+
+const editableCellIndexes = {
+  2: true
+};
+
+const isEditable = (index) => {
+  return !!editableCellIndexes[index]
 };
 

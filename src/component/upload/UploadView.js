@@ -27,7 +27,7 @@ export class UploadView extends Component {
 
   analysisBtnClick = (event) => {
     const {file} = this.state;
-    if (!Object.hasOwnProperty("name", file)){
+    if (!file.name){
       this.props.actions.openPopTip(POP_TYPE.danger, "Choose a file!");
       return
     }

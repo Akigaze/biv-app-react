@@ -7,7 +7,8 @@ import {
   SAVE_INSERT_RESULT,
   SAVE_TABLE_CREATE_RESULT,
   SAVE_UPLOAD_RESULT,
-  SET_UPLOADED_FILE
+  SET_UPLOADED_FILE,
+  MODIFY_FIELD_NAME
 } from "../constant/action-type/upload-action-type";
 import {POP_TYPE} from "../constant/upload";
 
@@ -95,4 +96,8 @@ export const insertDate = (tableName, fields, file, operation) => {
     );
 
   }
+};
+
+export const modifyFieldName = (id, name) => {
+  return {type: MODIFY_FIELD_NAME, payload: {id, name}}
 };
