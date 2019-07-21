@@ -8,7 +8,7 @@ import "../../style/upload.css"
 import {first} from "../../util/array-util";
 import {OPERATION_TYPE} from "../../constant/upload";
 import {BlankColumn} from "../common/blank";
-import {closePop, uploadFileToServer} from "../../action/upload";
+import {closePop, doFileAnalyze, uploadFileToServer} from "../../action/upload";
 import {isEmpty} from "lodash";
 import UploadResultTable from "./UploadResultTable";
 
@@ -20,7 +20,6 @@ export class UploadView extends Component {
     this.fileInput = React.createRef();
     this.state = {
       file: {},
-      operationType: create,
       showAnalysisResult: true,
     }
   }
@@ -30,13 +29,9 @@ export class UploadView extends Component {
     this.setState({file: first(fileList) || {}})
   };
 
-  operationTypeSelect = (event) => {
-    this.setState({operationType: event.target.value})
-  };
-
   analysisBtnClick = (event) => {
-    const {file, operationType} = this.state;
-    this.props.actions.upload(file, operationType)
+    const {file} = this.state;
+    this.props.actions.upload(file)
   };
 
   alertToggle = () => {
@@ -44,10 +39,10 @@ export class UploadView extends Component {
   };
 
   render() {
-    const {uploadResult, pop} = this.props;
-    const {file, operationType} = this.state;
+    const {analysisResult, pop} = this.props;
+    const {file} = this.state;
     const fileLabel = file.name || "Choose a file";
-    const hasUploadResult = !isEmpty(uploadResult);
+    const hasUploadResult = !isEmpty(analysisResult);
 
     return (
       <div className="upload-view">
@@ -57,16 +52,9 @@ export class UploadView extends Component {
           <CustomInput id="file-upload" type="file" innerRef={this.fileInput} label={fileLabel} onChange={this.fileSelect}/>
         </FormGroup>
         <FormGroup>
-          <CustomInput id="create" type="radio" name="operationType" className="radio" label="Create New Table" value={create} checked={operationType === create} onChange={this.operationTypeSelect} inline/>
-          <BlankColumn width={30}/>
-          <CustomInput id="insert" type="radio" name="operationType" className="radio" label="Insert Existed Table" value={insert} checked={operationType === insert} onChange={this.operationTypeSelect} inline/>
-        </FormGroup>
-        <FormGroup>
           <Button color="primary" onClick={this.analysisBtnClick}>Analysis</Button>
         </FormGroup>
-        {hasUploadResult &&
-          <UploadResultTable />
-        }
+        {hasUploadResult && <UploadResultTable />}
       </div>
     )
   }
@@ -74,7 +62,7 @@ export class UploadView extends Component {
 
 function mapStateToProps(state){
   return {
-    uploadResult: state.upload.uploadResult,
+    analysisResult: state.upload.analysisResult,
     pop: state.upload.pop
   }
 }
@@ -82,7 +70,7 @@ function mapStateToProps(state){
 function mapDispatchToProps(dispatch){
   return {
     actions: bindActionCreators({
-      upload: uploadFileToServer,
+      upload: doFileAnalyze,
       closePopTip: closePop
     }, dispatch)
   }

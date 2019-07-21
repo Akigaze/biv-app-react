@@ -34,18 +34,17 @@ export class UploadResultTable extends Component {
   };
 
   createBtnClick = () => {
-    const {tableName, uploadResult} = this.props;
+    const {tableName, tableFields} = this.props;
     const isDropExist = this.dropExist.current.checked;
-    const fields = uploadResult.fields.map(field => {
+    const fields = tableFields.map(field => {
       return {name: field.nameOfDatabase, type: field.type}
     });
     this.props.actions.create(tableName, fields, isDropExist, OPERATION_TYPE.create)
   };
 
   insertBtnClick = () => {
-    const {tableName, tableStructure, uploadedFile} = this.props;
-    let {fields} = tableStructure;
-    this.props.actions.insert(tableName, fields, uploadedFile, OPERATION_TYPE.insert)
+    const {tableName, tableFields, uploadedFile} = this.props;
+    this.props.actions.insert(tableName, tableFields, uploadedFile, OPERATION_TYPE.insert)
   };
 
   changeTableName = (event) => {
@@ -54,7 +53,7 @@ export class UploadResultTable extends Component {
   };
 
   render() {
-    const {uploadResult, tableName} = this.props;
+    const {analysisResult, tableName} = this.props;
     const {showAnalyzeResult} = this.state;
 
     return (
@@ -72,12 +71,12 @@ export class UploadResultTable extends Component {
               </InputGroup>
             </FormGroup>
             <FormGroup>
-              <DataTable headers={tableHeaders} data={uploadResult.fields}/>
+              <DataTable headers={tableHeaders} data={analysisResult.fields}/>
             </FormGroup>
             <FormGroup>
               <InputGroup>
                 <InputGroupAddon addonType="prepend">Total Row Number</InputGroupAddon>
-                <Input id="row-count" type="text" disabled value={uploadResult.count}/>
+                <Input id="row-count" type="text" disabled value={analysisResult.count}/>
               </InputGroup>
             </FormGroup>
           </Collapse>
@@ -96,10 +95,9 @@ export class UploadResultTable extends Component {
 function mapStateToProps(state) {
   return {
     uploadedFile: state.upload.file,
-    uploadResult: state.upload.uploadResult,
-    createResult: state.upload.tableCreateResult,
+    analysisResult: state.upload.analysisResult,
     insertResult: state.upload.insertResult,
-    tableStructure: state.upload.tableStructure,
+    tableFields: state.upload.tableFields,
     tableName: state.upload.tableName
   }
 }

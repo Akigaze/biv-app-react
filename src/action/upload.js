@@ -32,10 +32,6 @@ function setClosePopJob(dispatch){
   }, 20000)
 }
 
-export const setUploadedFile = (file) => {
-  return {type: SET_UPLOADED_FILE, file}
-};
-
 export const closePop = () => {
   return {type: CLOSE_POP}
 };
@@ -44,11 +40,11 @@ export const changeTableName = (name) => {
   return {type: CHANGE_TABLE_NAME, payload: {name}}
 };
 
-export const uploadFileToServer = (file, operation) => {
+export const doFileAnalyze = (file) => {
   return async (dispatch) => {
     const data = new FormData();
     data.append("file", file);
-    const url = `/file?operation=${operation}`;
+    const url = `/file`;
     const response = await formAxios.post(url, data);
     if (response != null) {
       dispatch({type: SET_UPLOADED_FILE, payload: {file}});
