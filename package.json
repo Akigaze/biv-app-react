@@ -44,7 +44,7 @@
     "jasmine-enzyme": "^7.0.1",
     "jest": "^23.6.0",
     "jest-enzyme": "^7.0.1",
-    "jsdom": "^13.0.0",
+    "jsdom": "^16.5.0",
     "redux-mock-store": "^1.5.3",
     "webpack": "^4.25.1",
     "webpack-cli": "^3.1.2",
